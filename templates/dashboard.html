@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Farm Today - Krishi Officer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='assets/Logo.png') }}" type="image/x-icon">
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-left">
+                <button class="toggle-sidebar-btn" id="sidebarToggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <div class="logo-small">
+                    <img src="/static/assets/Logo.png" alt="Krishi Officer Logo">
+                    <span>Krishi Officer</span>
+                </div>
+            </div>
+            <nav class="nav">
+                <a href="#Language">Language</a>
+            </nav>
+        </div>
+    </header>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        
+        <ul class="nav-links">
+            <li><a href="#" class="nav-item active"><span class="nav-icon">📊</span> <span class="nav-text">Dashboard</span></a></li>
+            <li><a href="#" class="nav-item"><span class="nav-icon">🌾</span> <span class="nav-text">Crop Advisory</span></a></li>
+            <li><a href="#" class="nav-item"><span class="nav-icon">🧪</span> <span class="nav-text">Soil Health</span></a></li>
+            <li><a href="/pest-detection" class="nav-item active"><span class="nav-icon">🪲</span> <span class="nav-text">Pest Detection</span></a></li>
+            <li><a href="#" class="nav-item"><span class="nav-icon">🌦</span> <span class="nav-text">Weather</span></a></li>
+            <li><a href="#" class="nav-item"><span class="nav-icon">📈</span> <span class="nav-text">Market Prices</span></a></li>
+            <li><a href="#" class="nav-item"><span class="nav-icon">🎙</span> <span class="nav-text">Voice Assistance</span></a></li>
+            <li><a href="#" class="nav-item"><span class="nav-icon">❓</span> <span class="nav-text">FAQ</span></a></li>
+        </ul>
+
+        <div class="user-profile">
+            <img src="https://ui-avatars.com/api/?name=Guest+Farmer&background=random" alt="User" class="avatar">
+            <div class="user-info">
+                <p>Guest Farmer</p>
+              
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+        <main class="main-content">
+            <header class="dashboard-header">
+                <h1>Welcome, Guest Farmer
+                </h1>
+                <span>Here's what's happening on your farm today</span>
+            </header>
+
+            <!-- Alert Banner -->
+            <div class="alert-banner">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <h3>Heavy rain expected today</h3>
+                    <p>Rain of 40-50mm expected between 2 PM to 6 PM. Check if your drainage is clear to protect crops from waterlogging.</p>
+                    <a href="#" class="alert-btn">See what to do →</a>
+                </div>
+            </div>
+
+            <!-- Farm Snapshot -->
+            <h2 class="section-title">Farm Snapshot</h2>
+            <section class="snapshot-grid">
+                <!-- Wheat -->
+                <div class="snapshot-card">
+                    <div class="snapshot-header">
+                        <h3>Wheat</h3>
+                        <span class="status-tag status-attention">⚠️ Attention needed</span>
+                    </div>
+                    <div class="snapshot-body">
+                        <p>Pest risk detected today</p>
+                    </div>
+                    <a href="#" class="check-btn">Check now →</a>
+                </div>
+
+                <!-- Rice -->
+                <div class="snapshot-card">
+                    <div class="snapshot-header">
+                        <h3>Rice</h3>
+                        <span class="status-tag status-good">✅ Good</span>
+                    </div>
+                    <div class="snapshot-body">
+                        <p>Water level is good</p>
+                    </div>
+                    <a href="#" class="check-btn">Check now →</a>
+                </div>
+
+                <!-- Sugarcane -->
+                <div class="snapshot-card">
+                    <div class="snapshot-header">
+                        <h3>Sugarcane</h3>
+                        <span class="status-tag status-good">✅ Good</span>
+                    </div>
+                    <div class="snapshot-body">
+                        <p>Growth on track</p>
+                    </div>
+                    <a href="#" class="check-btn">Check now →</a>
+                </div>
+            </section>
+
+            <!-- What you can do today -->
+            <h2 class="section-title">What you can do today</h2>
+            <section class="action-grid">
+                <a href="/pest-detection" class="action-card pest">
+                    <div class="action-icon">🪲</div>
+                    <div class="action-details">
+                        <h3>Pest Detection</h3>
+                        <span class="badge-active">Active </span>
+                    </div>
+                </a>
+                <a href="#" class="action-card weather">
+                    <div class="action-icon">🌦</div>
+                    <div class="action-details">
+                        <h3>Weather</h3>
+                        <span class="badge-soon">Soon</span>
+                    </div>
+                </a>
+                <a href="#" class="action-card prices">
+                    <div class="action-icon">📈</div>
+                    <div class="action-details">
+                        <h3>Market Prices</h3>
+                        <span class="badge-soon">Soon</span>
+                    </div>
+                </a>
+                <a href="#" class="action-card soil">
+                    <div class="action-icon">🧪</div>
+                    <div class="action-details">
+                        <h3>Soil Health</h3>
+                        <span class="badge-soon">Soon</span>
+                    </div>
+                </a>
+                <a href="#" class="action-card voice">
+                    <div class="action-icon">🎙</div>
+                    <div class="action-details">
+                        <h3>Voice assistant</h3>
+                        <span class="badge-soon">Soon</span>
+                    </div>
+                </a>
+                <a href="#" class="action-card faq">
+                    <div class="action-icon">❓</div>
+                    <div class="action-details">
+                        <h3>FAQ & Help</h3>
+                        <span class="badge-soon">Soon</span>
+                    </div>
+                </a>
+            </section>
+
+            <!-- Quick Info -->
+            <h2 class="section-title">Quick Info</h2>
+            <section class="quick-info-grid">
+                <a href="#" class="info-card">
+                    <div class="info-left">
+                        <h4>☀️ Today's Weather</h4>
+                        <div class="info-val">28°C</div>
+                        <p class="info-desc">Cloudy with rain expected</p>
+                    </div>
+                    <div class="info-arrow">→</div>
+                </a>
+                <a href="#" class="info-card">
+                    <div class="info-left">
+                        <h4>₹ Wheat Price (Nearby Mandi)</h4>
+                        <div class="info-val">₹2,150/quintal</div>
+                        <p class="info-desc">Updated 2 hours ago</p>
+                    </div>
+                    <div class="info-arrow">→</div>
+                </a>
+            </section>
+        </main>
+    </div>
+
+    <!-- Voice FAB -->
+    <div class="voice-fab">
+        <span>🎙</span>
+        <label>Talk to Krishi</label>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
