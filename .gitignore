@@ -1,0 +1,22 @@
+# Python internals
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Environment Variables (Secrets)
+.env
+
+# Uploads (Track directory, ignore content)
+uploads/crops/*
+!uploads/crops/.gitkeep
+
+# IDE & OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

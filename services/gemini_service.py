@@ -1,0 +1,1 @@
+# Contains all Gemini AI logic for image analysis, prompt handling, and response generation.

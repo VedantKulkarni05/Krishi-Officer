@@ -1,0 +1,2 @@
+-- schema.sql uses UUID + SERIAL
+-- Defines PostgreSQL tables for chat sessions, messages, and image analysis data.

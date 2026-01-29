@@ -1,0 +1,1 @@
+# Main entry point of the Flask app; initializes Flask, loads environment variables, registers routes, and starts the server.

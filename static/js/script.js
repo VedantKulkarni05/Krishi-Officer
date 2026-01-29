@@ -1,0 +1,1 @@
+// Handles frontend logic like sending messages, uploading images, and loading chat history.
