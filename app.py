@@ -22,6 +22,11 @@ def pest_detection():
     """Serve the pest detection page"""
     return render_template('pest-detection.html')
 
+@app.route('/crop-advisory')
+def crop_advisory():
+    """Serve the crop advisory page"""
+    return render_template('crop-advisory.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pest & Disease Detection - Krishi Officer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/pest_detection.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crop-advisory.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='assets/Logo.png') }}" type="image/x-icon">
 </head>
 
@@ -36,16 +36,16 @@
         <ul class="nav-links">
             <li><a href="/dashboard" class="nav-item"><span class="nav-icon">📊</span> <span
                         class="nav-text">Dashboard</span></a></li>
-            <li><a href="/pest-detection" class="nav-item active"><span class="nav-icon">🪲</span> <span
-                        class="nav-text">Pest Detection</span></a></li>
+            <li><a href="/crop-advisory" class="nav-item active"><span class="nav-icon">🪲</span> <span
+                        class="nav-text">Crop Advisory</span></a></li>
         </ul>
     </aside>
 
     <div class="main-wrapper">
         <main class="main-content">
             <header class="page-header">
-                <h1>🪲 Pest & Disease Detection</h1>
-                <p class="subtitle">Describe the issue and attach a photo for AI analysis</p>
+                <h1>🪲 Crop Advisory</h1>
+                <p class="subtitle">Describe the crop and attach a photo for AI analysis</p>
             </header>
 
             <div class="chat-container">
@@ -72,8 +72,7 @@
                             <button class="plus-btn" id="plusBtn" type="button" title="Add Image">+</button>
 
                             <textarea id="textInput" class="chat-textarea"
-                                placeholder="Describe the symptoms (e.g., yellow spots on leaves)..."
-                                rows="1"></textarea>
+                                placeholder="Describe the crop (e.g., rice, wheat, maize)..." rows="1"></textarea>
 
                             <button class="send-btn" id="diagnoseBtn">
                                 <span>➤</span>
@@ -86,7 +85,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/pest_detection.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/crop-advisory.js') }}"></script>
 </body>
 
 </html>

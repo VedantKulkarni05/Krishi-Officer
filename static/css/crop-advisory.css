@@ -68,32 +68,16 @@
     gap: 10px;
 }
 
-.result-section-title {
-    font-family: var(--font-heading);
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin: 15px 0 10px 0;
-}
-
 .result-text {
     line-height: 1.7;
     font-size: 16px;
     color: #333;
 }
 
-.result-text p {
-    margin-bottom: 15px;
-}
-
-.result-text ul,
-.result-text ol {
-    margin-bottom: 15px;
-    padding-left: 20px;
-}
-
-.result-text li {
-    margin-bottom: 8px;
+.result-text br {
+    content: "";
+    display: block;
+    margin: 10px 0;
 }
 
 /* --- Fixed Bottom Input Bar --- */
