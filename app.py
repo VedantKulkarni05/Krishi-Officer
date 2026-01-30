@@ -1,7 +1,10 @@
 # Main entry point of the Flask app
 from flask import Flask, render_template
+from routes.analyze_routes import analyze_bp
 
 app = Flask(__name__)
+# Register the routes from your other files
+app.register_blueprint(analyze_bp)
 
 @app.route('/')
 def index():

@@ -10,7 +10,6 @@
 </head>
 <body>
 
-    <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="header-left">
@@ -22,108 +21,55 @@
                     <span>Krishi Officer</span>
                 </div>
             </div>
-            <nav class="nav">
-                <a href="#Language">Language</a>
-            </nav>
+            <nav class="nav"><a href="#Language">Language</a></nav>
         </div>
     </header>
 
-    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
-
         <ul class="nav-links">
             <li><a href="/dashboard" class="nav-item"><span class="nav-icon">📊</span> <span class="nav-text">Dashboard</span></a></li>
-            <li><a href="#" class="nav-item"><span class="nav-icon">🌾</span> <span class="nav-text">Crop Advisory</span></a></li>
-            <li><a href="#" class="nav-item"><span class="nav-icon">🧪</span> <span class="nav-text">Soil Health</span></a></li>
             <li><a href="/pest-detection" class="nav-item active"><span class="nav-icon">🪲</span> <span class="nav-text">Pest Detection</span></a></li>
-            <li><a href="#" class="nav-item"><span class="nav-icon">🌦</span> <span class="nav-text">Weather</span></a></li>
-            <li><a href="#" class="nav-item"><span class="nav-icon">📈</span> <span class="nav-text">Market Prices</span></a></li>
-            <li><a href="#" class="nav-item"><span class="nav-icon">🎙</span> <span class="nav-text">Voice Assistance</span></a></li>
-            <li><a href="#" class="nav-item"><span class="nav-icon">❓</span> <span class="nav-text">FAQ</span></a></li>
-        </ul>
-
-        <div class="user-profile">
-            <img src="https://ui-avatars.com/api/?name=Guest+Farmer&background=random" alt="User" class="avatar">
-            <div class="user-info">
-                <p>Guest Farmer</p>
-            </div>
-        </div>
+            </ul>
     </aside>
 
-    <!-- Main Wrapper -->
     <div class="main-wrapper">
         <main class="main-content">
             <header class="page-header">
                 <h1>🪲 Pest & Disease Detection</h1>
-                <p class="subtitle">Upload an image or describe the issue to get an AI-powered diagnosis</p>
+                <p class="subtitle">Describe the issue and attach a photo for AI analysis</p>
             </header>
 
-            <div class="detection-grid">
-                <!-- Input Panel -->
-                <div class="input-panel">
-                    <div class="panel-card">
-                        <h2 class="panel-title">Describe the Issue</h2>
-                        
-                        <!-- Input Mode Toggle -->
-                        <div class="input-mode-toggle">
-                            <button class="mode-btn active" data-mode="image">
-                                <span>📷</span> Upload Image
-                            </button>
-                            <button class="mode-btn" data-mode="text">
-                                <span>✍️</span> Describe
-                            </button>
+            <div class="chat-container">
+                <div class="ai-response-area">
+                    <div class="panel-card" id="resultsPanel">
+                        <div class="results-placeholder" id="resultsPlaceholder">
+                            <div class="placeholder-icon">🌱</div>
+                            <p>Your AI diagnosis will appear here after you send a query.</p>
                         </div>
-
-                        <!-- Image Upload Section -->
-                        <div class="input-section" id="imageSection">
-                            <div class="upload-area" id="uploadArea">
-                                <input type="file" id="imageInput" accept="image/*" hidden>
-                                <div class="upload-placeholder" id="uploadPlaceholder">
-                                    <div class="upload-icon">📸</div>
-                                    <p class="upload-text">Click to upload or drag and drop</p>
-                                    <span class="upload-hint">PNG, JPG up to 10MB</span>
-                                </div>
-                                <div class="image-preview" id="imagePreview" style="display: none;">
-                                    <img id="previewImg" src="" alt="Preview">
-                                    <button class="remove-btn" id="removeImage">✕</button>
-                                </div>
+                        <div class="results-content" id="resultsContent" style="display: none;">
                             </div>
-                        </div>
-
-                        <!-- Text Input Section -->
-                        <div class="input-section" id="textSection" style="display: none;">
-                            <textarea 
-                                id="textInput" 
-                                class="text-input" 
-                                placeholder="Describe the pest or disease symptoms you're observing...&#10;&#10;Example: My tomato plants have yellow spots on leaves, brown spots are spreading..."
-                                rows="8"
-                            ></textarea>
-                        </div>
-
-                        <!-- Diagnose Button -->
-                        <button class="diagnose-btn" id="diagnoseBtn">
-                            <span>🔍</span> Diagnose
-                        </button>
                     </div>
                 </div>
 
-                <!-- Results Panel -->
-                <div class="results-panel">
-                    <div class="panel-card">
-                        <h2 class="panel-title">AI Diagnosis</h2>
+                <div class="chat-input-wrapper">
+                    <div class="image-preview-bubble" id="imagePreview" style="display: none;">
+                        <img id="previewImg" src="" alt="Preview">
+                        <button class="remove-btn" id="removeImage">✕</button>
+                    </div>
+                    
+                    <div class="input-bar">
+                        <input type="file" id="imageInput" accept="image/*" hidden>
+                        <button class="plus-btn" id="plusBtn" type="button" title="Add Image">+</button>
                         
-                        <div class="results-placeholder" id="resultsPlaceholder">
-                            <div class="placeholder-icon">🪲</div>
-                            <p>Upload an image or describe the issue to see results</p>
-                        </div>
-
-                        <div class="results-content" id="resultsContent" style="display: none;">
-                            <!-- Results will be populated here -->
-                            <div class="result-item">
-                                <h3 class="result-title">Detected Issue</h3>
-                                <p class="result-text">Analysis results will appear here...</p>
-                            </div>
-                        </div>
+                        <textarea 
+                            id="textInput" 
+                            class="chat-textarea" 
+                            placeholder="Describe the symptoms (e.g., yellow spots on leaves)..."
+                            rows="1"></textarea>
+                        
+                        <button class="send-btn" id="diagnoseBtn">
+                            <span>➤</span>
+                        </button>
                     </div>
                 </div>
             </div>
