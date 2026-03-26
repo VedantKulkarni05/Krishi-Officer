@@ -1,186 +1,268 @@
-# Krishi Officer - AI-Powered Agricultural Assistant
+# Krishi Officer
 
-![Logo](/static/assets/Logo.png)
+AI-powered crop advisory and pest detection platform built for Indian farming workflows.
 
-## Crop & Pest Help Module – AI System
+Live URL: https://krishi-officer.onrender.com
 
-### Purpose
-Krishi Officer is a Flask-based web application that leverages **Gemini Vision AI** to help farmers analyze crops and pests. It supports image uploads, chat-style conversations, and persistent chat history, with recommendations tailored for Indian farming conditions.
+![Krishi Officer Logo](static/assets/Logo.png)
 
----
+## Product Preview
 
-## Features
+![Landing Page](static/assets/260327_02h48m27s_screenshot.png)
+![Dashboard](static/assets/260327_02h48m57s_screenshot.png)
+![Crop Advisory](static/assets/260327_02h49m16s_screenshot.png)
+![Pest Detection](static/assets/260327_02h49m27s_screenshot.png)
 
-- 🌾 **AI-Powered Crop Analysis** - Upload crop/pest images for intelligent analysis using Gemini Vision
-- 💬 **Chat-based Conversations** - Persistent chat history with UUID-based sessions
-- 📊 **Dashboard** - View and manage your analysis history
-- 🔍 **Pest Detection** - Identify pests and diseases in crops
-- 🌾 **Agricultural Guidance** - Get recommendations tailored for Indian farming conditions
+## Purpose
 
----
+Krishi Officer helps farmers get fast, practical, organic-first guidance by combining image analysis and conversational follow-up.
 
-## Prerequisites
+It is designed to:
+- Detect likely pest or disease patterns from crop images
+- Provide crop health advisory when pests are not visible
+- Support iterative follow-up in the same session instead of one-off answers
+- Preserve session history so users can revisit past diagnostics
 
-Before running the project, ensure you have the following installed:
+## Product Objectives
 
-- **Python 3.8+**
-- **PostgreSQL** (database)
-- **pip** (Python package manager)
-- **Gemini API Key** (from [Google AI Studio](https://ai.google.dev))
+- Improve first-response accuracy for crop/pest issues through a structured AI output contract
+- Keep advice actionable within 24-48 hours, with low-cost, local, organic approaches
+- Reduce repeat user effort through persistent chat sessions and message history
+- Serve multilingual users with UI and response language support
 
----
+## Current Capabilities
 
-## Project Structure
+- Secure signup/login with Supabase Auth
+- Protected routes with Bearer token validation middleware
+- AI analysis endpoint for image + text or text-only guidance
+- Follow-up continuity logic (intent detection, role lock, anti-repeat guard)
+- Session lifecycle APIs (create/list/view/delete)
+- PostgreSQL persistence for sessions and messages
+- Responsive web UI for landing, dashboard, pest detection, and crop advisory
+- Language options in UI: English, Hindi, Marathi, Tamil, Telugu
 
-```
+## Tech Stack
+
+### Backend
+
+- Python 3.11 (Render runtime)
+- Flask 3.1.1
+- Gunicorn 23.0.0
+- python-dotenv 1.0.1
+
+### AI and Imaging
+
+- Google Gemini via google-generativeai 0.8.5
+- Pillow 11.2.1
+
+### Data and Auth
+
+- Supabase Python SDK 2.15.3 (Auth + table API usage)
+- PostgreSQL
+- psycopg2-binary 2.9.10 (connection pool + SQL execution)
+
+### Frontend
+
+- Server-rendered HTML templates
+- Vanilla JavaScript modules
+- Custom CSS (dashboard, chat, auth, landing)
+
+### Deployment
+
+- Render Web Service
+- Procfile process: gunicorn app:app
+
+## Architecture Overview
+
+Krishi Officer follows a monolithic Flask architecture with server-rendered pages and JSON APIs.
+
+Flow summary:
+1. User signs in and gets a Supabase access token.
+2. Frontend sends protected API requests with Authorization: Bearer token.
+3. Flask middleware validates token using Supabase Auth and injects authenticated user into request context.
+4. Analyze route composes prompt context, calls Gemini, validates JSON response structure, formats advisory text, and stores messages.
+5. Session/message APIs query PostgreSQL-backed tables for history rendering.
+
+## Repository Map
+
+```text
 krishi-officer/
-├── app.py                     # Flask app entry point
-├── routes/
-│   ├── __init__.py
-│   ├── session_routes.py      # Chat session CRUD (UUID-based)
-│   ├── message_routes.py      # Chat messages CRUD
-│   └── analyze_routes.py      # Image + Gemini orchestration
-├── services/
-│   └── gemini_service.py      # Gemini Vision API integration
-├── database/
-│   ├── db.py                  # PostgreSQL connection (psycopg2)
-│   └── schema.sql             # PostgreSQL tables (UUID, SERIAL)
-├── uploads/
-│   └── crops/                 # Uploaded crop/soil images
-├── static/
-│   ├── css/
-│   │   ├── style.css
-│   │   ├── dashboard.css
-│   │   └── pest_detection.css
-│   ├── js/
-│   │   ├── script.js
-│   │   ├── dashboard.js
-│   │   └── pest_detection.js
-│   └── assets/
-├── templates/
-│   ├── index.html
-│   ├── dashboard.html
-│   └── pest-detection.html
-├── .env                       # Environment variables (ignored in git)
-├── .gitignore
-└── README.md
+|- app.py
+|- supabase_client.py
+|- database/
+|  |- db.py
+|  |- schema.sql
+|- middleware/
+|  |- auth_middleware.py
+|- routes/
+|  |- analyze_routes.py
+|  |- session_routes.py
+|  |- message_routes.py
+|- services/
+|  |- gemini_service.py
+|  |- prompt_registry.py
+|- static/
+|  |- css/
+|  |- js/
+|  |- assets/
+|- templates/
+|  |- index.html
+|  |- dashboard.html
+|  |- crop-advisory.html
+|  |- pest-detection.html
+|  |- login.html
+|  |- signup.html
+|- tests/
+|  |- verify_auth.py
+|- requirements.txt
+|- runtime.txt
+|- Procfile
 ```
 
----
+## API Surface
 
-## Setup & Installation
+### Public page routes
 
-### 1. Fork the Repository
+- GET /
+- GET /dashboard
+- GET /pest-detection
+- GET /crop-advisory
+- GET /login
+- GET /signup
 
-1. Visit the [GitHub repository](https://github.com)
-2. Click the **Fork** button in the top-right corner
-3. This creates a copy of the repository under your GitHub account
+### Auth routes
 
-### 2. Clone Your Fork
+- POST /signup
+- POST /login
+
+### Protected chat routes
+
+- POST /analyze-crop
+- POST /sessions
+- GET /sessions
+- GET /sessions/<session_id>/messages
+- DELETE /sessions/<session_id>
+
+### Additional protected routes
+
+- POST /create-chat
+- POST /send-message
+
+## Database Model
+
+Schema is initialized at app startup from database/schema.sql.
+
+Tables:
+- ai_sessions
+  - id UUID primary key (gen_random_uuid())
+  - user_id UUID
+  - created_at timestamp
+- ai_messages
+  - id serial primary key
+  - session_id UUID references ai_sessions(id) on delete cascade
+  - role check in (user, model)
+  - content text
+  - created_at timestamp
+
+Indexes:
+- idx_ai_sessions_user_created_at
+- idx_ai_messages_session_created_at
+
+## UI Walkthrough (Live Product)
+
+Based on the current deployment at https://krishi-officer.onrender.com:
+
+- Landing page introduces two primary tools: Pest Detection and Crop Advisory
+- Dashboard shows aggregate session stats and shortcuts for new analyses
+- Crop Advisory page supports image attachment, typed query, and session history replay
+- Pest Detection page mirrors advisory flow with dedicated diagnosis context
+
+## Local Development Setup
+
+### 1. Clone
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/krishi-officer.git
+git clone <your-repo-url>
 cd krishi-officer
 ```
 
-Replace `YOUR_USERNAME` with your GitHub username.
-
-### 3. Create a Virtual Environment
+### 2. Create and activate virtual environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
 ```
 
-### 4. Install Dependencies
+Windows (PowerShell):
+
+```powershell
+venv\Scripts\Activate.ps1
+```
+
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Set Up Environment Variables
+### 4. Configure environment variables
 
-Create a `.env` file in the project root:
+Create .env in project root:
 
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-DATABASE_URL=postgresql://username:password@localhost:5432/krishi_officer
-FLASK_ENV=development
-SECRET_KEY=your_secret_key_here
+```dotenv
+GEMINI_API_KEY=your_gemini_api_key
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_KEY=your_supabase_anon_or_service_key
+DATABASE_URL=postgresql://user:password@host:port/postgres?sslmode=require
+SECRET_KEY=your_flask_secret
+FLASK_DEBUG=true
 ```
 
-**Getting a Gemini API Key:**
-1. Go to [Google AI Studio](https://ai.google.dev)
-2. Click "Get API Key"
-3. Copy your API key and paste it in the `.env` file
+Notes:
+- Do not wrap env values in quotes on Render.
+- For Supabase pooler connections, include sslmode=require in DATABASE_URL.
 
-### 6. Set Up the Database
-
-```bash
-# Create PostgreSQL database
-psql -U postgres -c "CREATE DATABASE krishi_officer;"
-
-# Load schema
-psql -U postgres -d krishi_officer -f database/schema.sql
-```
-
-### 7. Run the Application
+### 5. Run the app
 
 ```bash
 python app.py
 ```
 
-The application will be available at `http://localhost:5000`
+App runs on http://localhost:5000 by default.
 
----
+## Render Deployment Notes
 
-## How to Use
+- Build installs dependencies from requirements.txt
+- Start command is defined in Procfile as gunicorn app:app
+- Runtime is pinned via runtime.txt
 
-1. **Home Page** - Access the dashboard at `/`
-2. **Start a New Chat** - Create a new session for crop/pest analysis
-3. **Upload Image** - Upload a crop or pest image for analysis
-4. **Get Insights** - Receive AI-powered recommendations and guidance
-5. **View History** - Check previous analyses in the dashboard
+Recommended Render environment variables:
+- GEMINI_API_KEY
+- SUPABASE_URL
+- SUPABASE_KEY
+- DATABASE_URL
+- SECRET_KEY
 
----
+## Testing
 
-## Contributing
-
-We welcome contributions! Here's how to get started:
-
-### Step 1: Fork the Repository
-- Click the **Fork** button on the GitHub repository page
-
-### Step 2: Create a Feature Branch
+Basic auth flow tests are available:
 
 ```bash
-git checkout -b feature/your-feature-name
+python -m unittest tests/verify_auth.py
 ```
 
-Use descriptive branch names like:
-- `feature/add-notification-system`
-- `fix/image-upload-bug`
-- `docs/improve-readme`
+## Security and Operations
 
-### Step 3: Make Your Changes
+- Never commit .env or secrets to git
+- Rotate credentials immediately if exposed
+- Use strong SUPABASE_KEY and SECRET_KEY values
+- Enforce TLS/SSL for database connections in production
 
-- Keep commits small and focused on one feature
-- Write clear, descriptive commit messages:
-  ```bash
-  git commit -m "feat: add multilingual support for farmer guidance"
-  ```
+## Known Improvement Areas
 
-### Step 4: Push Your Changes
+- Separate dedicated API endpoints for crop vs pest analysis modes (currently both pages post to /analyze-crop)
+- Expand automated testing for route-level and frontend integration coverage
+- Add observability around AI failures, retries, and latency metrics
+- Add role-based auth and stronger server-side validation hardening
 
-```bash
-git push origin feature/your-feature-name
-```
-
-### Step 5: Create a Pull Request
-
-1. Go to your forked repository on GitHub
-2. Click **Compare & pull request**
-3. Add a clear title and description of your changes
-4. Link any related issues if applicable
-5. Submit the pull request
 
