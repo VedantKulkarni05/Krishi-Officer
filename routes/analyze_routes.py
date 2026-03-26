@@ -272,7 +272,7 @@ def _build_session_summary(messages):
 def _create_or_validate_session(cur, session_id, user_id):
     """Create a new session if none provided. Returns a UUID."""
     if not session_id:
-        cur.execute("INSERT INTO sessions (user_id) VALUES (%s) RETURNING id", (user_id,))
+        cur.execute("INSERT INTO ai_sessions (user_id) VALUES (%s) RETURNING id", (user_id,))
         return cur.fetchone()[0]
     # Validate that the provided session_id is a valid UUID format
     try:
@@ -372,7 +372,7 @@ def analyze_crop():
         validated_session_id = _create_or_validate_session(cur, session_id, g.user.id)
 
         cur.execute(
-            "SELECT role, content FROM messages WHERE session_id = %s ORDER BY created_at DESC LIMIT 8",
+            "SELECT role, content FROM ai_messages WHERE session_id = %s ORDER BY created_at DESC LIMIT 8",
             (str(validated_session_id),)
         )
         prev_rows = cur.fetchall()
@@ -398,7 +398,7 @@ def analyze_crop():
 
         msg_content = user_query if user_query else "[Image Uploaded]"
         cur.execute(
-            "INSERT INTO messages (session_id, role, content) VALUES (%s, %s, %s)",
+            "INSERT INTO ai_messages (session_id, role, content) VALUES (%s, %s, %s)",
             (str(validated_session_id), 'user', msg_content)
         )
 
@@ -500,7 +500,7 @@ def analyze_crop():
     cur2 = conn2.cursor()
     try:
         cur2.execute(
-            "INSERT INTO messages (session_id, role, content) VALUES (%s, %s, %s)",
+            "INSERT INTO ai_messages (session_id, role, content) VALUES (%s, %s, %s)",
             (str(validated_session_id), 'model', advice_text)
         )
         conn2.commit()

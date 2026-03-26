@@ -14,7 +14,7 @@ def create_session():
     cur = conn.cursor()
     try:
         cur.execute(
-            "INSERT INTO sessions (user_id) VALUES (%s) RETURNING id, created_at",
+            "INSERT INTO ai_sessions (user_id) VALUES (%s) RETURNING id, created_at",
             (g.user.id,)
         )
         created = cur.fetchone()
@@ -41,7 +41,7 @@ def get_sessions():
     cur = conn.cursor()
     try:
         cur.execute(
-            "SELECT id, created_at FROM sessions WHERE user_id = %s ORDER BY created_at DESC LIMIT 50 OFFSET %s",
+            "SELECT id, created_at FROM ai_sessions WHERE user_id = %s ORDER BY created_at DESC LIMIT 50 OFFSET %s",
             (g.user.id, offset)
         )
         sessions = cur.fetchall()
@@ -66,12 +66,12 @@ def get_messages(session_id):
     cur = conn.cursor()
     try:
         # First verify the session belongs to the user
-        cur.execute("SELECT id FROM sessions WHERE id = %s AND user_id = %s", (str(validated_id), g.user.id))
+        cur.execute("SELECT id FROM ai_sessions WHERE id = %s AND user_id = %s", (str(validated_id), g.user.id))
         if not cur.fetchone():
             return jsonify({"error": "Session not found or unauthorized."}), 404
 
         cur.execute(
-            "SELECT id, role, content, created_at FROM messages WHERE session_id = %s ORDER BY created_at ASC",
+            "SELECT id, role, content, created_at FROM ai_messages WHERE session_id = %s ORDER BY created_at ASC",
             (str(validated_id),)
         )
         messages = cur.fetchall()
@@ -100,13 +100,13 @@ def delete_session(session_id):
     cur = conn.cursor()
     try:
         cur.execute(
-            "SELECT id FROM sessions WHERE id = %s AND user_id = %s",
+            "SELECT id FROM ai_sessions WHERE id = %s AND user_id = %s",
             (str(validated_id), g.user.id)
         )
         if not cur.fetchone():
             return jsonify({"error": "Session not found or unauthorized."}), 404
 
-        cur.execute("DELETE FROM sessions WHERE id = %s", (str(validated_id),))
+        cur.execute("DELETE FROM ai_sessions WHERE id = %s", (str(validated_id),))
         conn.commit()
         return jsonify({"status": "deleted", "id": str(validated_id)}), 200
     except Exception:

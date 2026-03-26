@@ -4,6 +4,7 @@ from flask import Flask, render_template, jsonify, request, g
 from routes.analyze_routes import analyze_bp
 from routes.session_routes import session_bp
 from supabase_client import supabase  
+from database.db import initialize_database
 from middleware.auth_middleware import token_required
 try:
     from supabase_auth.errors import AuthApiError
@@ -12,6 +13,9 @@ except ImportError:
     AuthApiError = Exception
 
 app = Flask(__name__)
+
+# Ensure required Postgres tables/extensions exist before serving requests.
+initialize_database()
 
 # Security & reliability config
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
