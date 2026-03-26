@@ -11,7 +11,20 @@
         resultsContent: document.getElementById('resultsContent'),
         historyList: document.getElementById('historyList'),
         sessionCount: document.getElementById('sessionCount'),
+        newChatBtn: document.getElementById('newChatBtn'),
     };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const forceNewSession = urlParams.get('new') === '1';
+    const requestedSessionId = urlParams.get('session_id');
+    const uiLang = localStorage.getItem('krishi_language') || 'en';
+    const deleteCopy = {
+        en: { label: 'Delete', confirm: 'Delete this chat session?', error: '⚠️ Failed to delete session. Please try again.' },
+        hi: { label: 'हटाएं', confirm: 'क्या यह चैट सत्र हटाना है?', error: '⚠️ सत्र हटाने में समस्या हुई। फिर से कोशिश करें।' },
+        mr: { label: 'हटवा', confirm: 'हे चॅट सत्र हटवायचे का?', error: '⚠️ सत्र हटवता आले नाही. पुन्हा प्रयत्न करा.' },
+        ta: { label: 'நீக்கு', confirm: 'இந்த உரையாடலை நீக்கவா?', error: '⚠️ அமர்வை நீக்க முடியவில்லை. மீண்டும் முயற்சிக்கவும்.' },
+        te: { label: 'తొలగించు', confirm: 'ఈ చాట్ సెషన్ తొలగించాలా?', error: '⚠️ సెషన్ తొలగించలేకపోయాం. మళ్లీ ప్రయత్నించండి.' },
+    }[uiLang] || { label: 'Delete', confirm: 'Delete this chat session?', error: '⚠️ Failed to delete session. Please try again.' };
 
     let selectedFile = null;
     let currentSessionId = localStorage.getItem('pest_session_id') || null;
@@ -50,6 +63,10 @@
             e.preventDefault();
             els.diagnoseBtn.click();
         }
+    });
+
+    els.newChatBtn?.addEventListener('click', async () => {
+        await createNewSession();
     });
 
     // --- Core API Logic ---
@@ -144,7 +161,8 @@
     }
 
     function formatMarkdown(text) {
-        return text
+        const safeText = escapeHTML(String(text || ''));
+        return safeText
             .replace(/^### (.+)$/gm, '<h3>$1</h3>')
             .replace(/^## (.+)$/gm, '<h2>$1</h2>')
             .replace(/^# (.+)$/gm, '<h1>$1</h1>')
@@ -168,6 +186,37 @@
             }[tag]));
     }
 
+    function resetChatUI() {
+        selectedFile = null;
+        els.textInput.value = '';
+        els.textInput.style.height = 'auto';
+        els.imageInput.value = '';
+        els.imagePreview.style.display = 'none';
+        els.previewImg.src = '';
+        els.resultsContent.innerHTML = '';
+        els.resultsContent.style.display = 'none';
+        els.resultsPlaceholder.style.display = 'flex';
+    }
+
+    async function createNewSession() {
+        try {
+            const res = window.authFetch
+                ? await window.authFetch('/sessions', { method: 'POST' })
+                : await fetch('/sessions', { method: 'POST' });
+            const data = await res.json();
+            if (!res.ok || !data.id) throw new Error(data.error || 'Failed to create session');
+
+            currentSessionId = data.id;
+            localStorage.setItem('pest_session_id', currentSessionId);
+            resetChatUI();
+            loadHistoryPanel();
+        } catch {
+            currentSessionId = null;
+            localStorage.removeItem('pest_session_id');
+            resetChatUI();
+        }
+    }
+
     // --- Session History Fetching ---
     async function loadHistoryPanel() {
         try {
@@ -189,8 +238,11 @@
                 const isActive = s.id === currentSessionId ? 'active' : '';
                 return `
                     <div class="history-item ${isActive}" data-id="${s.id}">
-                        <div class="history-item-id">Session #${s.id.slice(0, 8)}</div>
-                        <div class="history-item-date">${date}</div>
+                        <div class="history-item-main">
+                            <div class="history-item-id">Session #${s.id.slice(0, 8)}</div>
+                            <div class="history-item-date">${date}</div>
+                        </div>
+                        <button class="history-delete-btn" data-delete-id="${s.id}" aria-label="Delete session">${deleteCopy.label}</button>
                     </div>`;
             }).join('');
 
@@ -203,6 +255,32 @@
                         localStorage.setItem('pest_session_id', sid);
                         loadSessionMessages(sid);
                         loadHistoryPanel(); // Refresh active state
+                    }
+                });
+            });
+
+            document.querySelectorAll('.history-delete-btn').forEach(btn => {
+                btn.addEventListener('click', async e => {
+                    e.stopPropagation();
+                    const sid = btn.getAttribute('data-delete-id');
+                    if (!sid) return;
+                    if (!confirm(deleteCopy.confirm)) return;
+
+                    try {
+                        const res = window.authFetch
+                            ? await window.authFetch(`/sessions/${sid}`, { method: 'DELETE' })
+                            : await fetch(`/sessions/${sid}`, { method: 'DELETE' });
+                        if (!res.ok) throw new Error('delete failed');
+
+                        if (sid === currentSessionId) {
+                            currentSessionId = null;
+                            localStorage.removeItem('pest_session_id');
+                            await createNewSession();
+                        } else {
+                            await loadHistoryPanel();
+                        }
+                    } catch {
+                        appendMessage('error', deleteCopy.error);
                     }
                 });
             });
@@ -237,9 +315,26 @@
         }
     }
 
-    // Initialize
-    loadHistoryPanel();
-    if (currentSessionId) {
-        loadSessionMessages(currentSessionId);
+    async function initializePage() {
+        await loadHistoryPanel();
+
+        if (forceNewSession) {
+            await createNewSession();
+            window.history.replaceState({}, '', '/pest-detection');
+            return;
+        }
+
+        if (requestedSessionId) {
+            currentSessionId = requestedSessionId;
+            localStorage.setItem('pest_session_id', requestedSessionId);
+            await loadSessionMessages(requestedSessionId);
+            return;
+        }
+
+        if (currentSessionId) {
+            await loadSessionMessages(currentSessionId);
+        }
     }
+
+    initializePage();
 })();

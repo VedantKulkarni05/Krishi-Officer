@@ -1,6 +1,20 @@
+import os
+from dotenv import load_dotenv
 from supabase import create_client
 
-SUPABASE_URL = "https://txtvnbjwzlzmqxsqzydn.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4dHZuYmp3emx6bXF4c3F6eWRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MjA1OTQsImV4cCI6MjA5MDA5NjU5NH0.SwczFmNVvrk15q0bVIhcP7gVVgK7mI4MObcwLmT7HYo"
+load_dotenv()
+
+SUPABASE_URL = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+SUPABASE_KEY = (
+    os.getenv("SUPABASE_KEY")
+    or os.getenv("SUPABASE_ANON_KEY")
+    or os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+)
+
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise ValueError(
+        "Missing Supabase configuration. Set SUPABASE_URL and SUPABASE_KEY "
+        "(or SUPABASE_ANON_KEY / NEXT_PUBLIC_* equivalents) in .env."
+    )
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)

@@ -79,7 +79,7 @@
           </a>
         </li>
         <li>
-          <a href="/crop-advisory" class="nav-item">
+          <a href="/crop-advisory?new=1" class="nav-item">
             <span class="nav-icon">🌾</span>
             <span class="nav-text" data-i18n="nav_crop">Crop Advisory</span>
           </a>
@@ -186,7 +186,10 @@
                 <p class="section-label" data-i18n="session_history">
                   Session History
                 </p>
-                <span class="session-count" id="sessionCount">—</span>
+                <div class="history-panel-actions">
+                  <button class="new-chat-btn" id="newChatBtn" data-i18n="new_chat">New Chat</button>
+                  <span class="session-count" id="sessionCount">—</span>
+                </div>
               </div>
               <div class="history-list" id="historyList">
                 <div class="empty-state"><span>⏳</span>Loading…</div>

@@ -14,7 +14,7 @@ except ImportError:
 app = Flask(__name__)
 
 # Security & reliability config
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'krishi-dev-secret')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # Block uploads larger than 16 MB to prevent DoS via large file attacks.
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 
@@ -140,4 +140,5 @@ def send_message():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    debug_mode = os.environ.get('FLASK_DEBUG', '').lower() in ('1', 'true', 'yes')
+    app.run(debug=debug_mode, host='0.0.0.0')

@@ -309,6 +309,29 @@
   margin-bottom: 0;
 }
 
+.history-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.new-chat-btn {
+  border: 1px solid rgba(45, 158, 79, 0.35);
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 8px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.new-chat-btn:hover {
+  border-color: var(--primary);
+  background: rgba(45, 158, 79, 0.18);
+}
+
 .history-list {
   flex: 1;
   overflow-y: auto;
@@ -325,6 +348,15 @@
   background: var(--bg);
   cursor: pointer;
   transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.history-item-main {
+  min-width: 0;
+  flex: 1;
 }
 
 .history-item:hover {
@@ -334,6 +366,33 @@
 .history-item.active {
   background: var(--primary-light);
   border-color: var(--primary);
+}
+
+.history-delete-btn {
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 7px;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(4px);
+  transition: all var(--transition);
+}
+
+.history-item:hover .history-delete-btn,
+.history-item:focus-within .history-delete-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.history-delete-btn:hover {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(239, 68, 68, 0.45);
 }
 
 .history-item-id {

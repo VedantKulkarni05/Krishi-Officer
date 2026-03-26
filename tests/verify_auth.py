@@ -64,6 +64,8 @@ class TestAuthIntegration(unittest.TestCase):
         mock_res = MagicMock()
         mock_res.session.access_token = "fake-jwt-token"
         mock_res.user.id = "user123"
+        mock_res.user.email = "testuser@example.com"
+        mock_res.user.user_metadata = {"name": "Test User"}
         mock_supabase.auth.sign_in_with_password.return_value = mock_res
 
         payload = {
