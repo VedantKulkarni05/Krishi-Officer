@@ -108,7 +108,10 @@
 
         try {
             const apiRes = window.authFetch ? await window.authFetch('/analyze-crop', { method: 'POST', body: formData }) : await fetch('/analyze-crop', { method: 'POST', body: formData });
-            const data = await apiRes.json();
+            const contentType = apiRes.headers.get('content-type') || '';
+            const data = contentType.includes('application/json')
+                ? await apiRes.json()
+                : { error: `Server error (${apiRes.status}). Please try again.` };
             if (!apiRes.ok || !data.advice) throw new Error(data.error || 'Analysis failed');
             
             // Save session

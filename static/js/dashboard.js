@@ -124,6 +124,8 @@
         const list = document.getElementById('sessionsList');
         const statSessions = document.getElementById('statSessions');
 
+        if (!list) return;
+
         try {
             const res = window.authFetch ? await window.authFetch('/sessions') : await fetch('/sessions');
             if (!res.ok) throw new Error('Failed to fetch');

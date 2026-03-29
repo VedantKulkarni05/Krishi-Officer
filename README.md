@@ -40,6 +40,7 @@ It is designed to:
 - PostgreSQL persistence for sessions and messages
 - Responsive web UI for landing, dashboard, pest detection, and crop advisory
 - Language options in UI: English, Hindi, Marathi, Tamil, Telugu
+- Official Docker support for local run and container-based deployment
 
 ## Tech Stack
 
@@ -71,6 +72,7 @@ It is designed to:
 
 - Render Web Service
 - Procfile process: gunicorn app:app
+- Docker image support via Dockerfile and .Dockerignore
 
 ## Architecture Overview
 
@@ -117,6 +119,8 @@ krishi-officer/
 |- requirements.txt
 |- runtime.txt
 |- Procfile
+|- Dockerfile
+|- .Dockerignore
 ```
 
 ## API Surface
@@ -242,6 +246,16 @@ Recommended Render environment variables:
 - SUPABASE_KEY
 - DATABASE_URL
 - SECRET_KEY
+
+## Docker Support (Official)
+
+Docker is now an official part of this project.
+
+Supported workflow:
+- Build image from the project Dockerfile
+- Run container locally with .env
+- Push image to Docker Hub
+- Deploy the same container image on cloud platforms
 
 ## Testing
 
